@@ -1,5 +1,13 @@
 import numpy as np
 import matplotlib.pyplot as plt
+'''
+def normalize(A):
+	rows = len(A)
+	cols = len(A[0])
+	for i in cols:
+		for ()
+		A[:, i]
+'''
 A = [[1, 1, 1, 0, 0], [2, 2, 2, 0, 0], [1, 1, 1, 0, 0], [5, 5, 5, 0, 0], [0, 0, 0, 2, 2], [0, 0, 0, 3, 3], [0, 0, 0, 1, 1]]
 U,s,V = np.linalg.svd(A, full_matrices=False) # SVD decomposition of A
 U = -U[:,[0,1]];

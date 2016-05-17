@@ -34,6 +34,7 @@ def test_set(a,b, no_samples, intercept, slope, variance, offset):
 
 
 X,Y,g = test_set(a=0, b=5, no_samples=200, intercept=10, slope=0, variance=0.5, offset=1)
+'''
 fig, ax = plt.subplots()
 R =  X[::2] #Even terms
 B =  X[1::2] #Odd terms
@@ -43,11 +44,12 @@ ax.scatter(B[:,0],B[:,1],marker='o', facecolor='blue', label="Outcome 0")
 ax.plot(X[:,0], g, color='green', label="True Decision Boundary")
 ax.legend(loc="upper left", prop={'size':8})
 #plt.show()
-
-def perceptron(X,y, learning_rate=0.1, max_iter=1000):
+'''
+def perceptron(X, y, learning_rate=0.1, max_iter=1000):
     #Expecting X = n x m inputs, y = n x 1 outputs taking values in -1,1
-    m=X.shape[1]
-    n=X.shape[0]
+    m = X.shape[1]
+    n = X.shape[0]
+    print y
     weight = np.zeros((m))
     bias = 0
     n_iter=0

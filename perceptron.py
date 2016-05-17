@@ -28,6 +28,7 @@ class Perceptron:
         l = np.linspace(-1,1)
         plt.plot(l, a*l+b, 'k-')
         cols = {1: 'r', -1: 'b'}
+        print self.X
         for x,s in self.X:
             plt.plot(x[1], x[2], cols[s]+'o')
         if mispts:
