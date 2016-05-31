@@ -2,6 +2,7 @@ from nolearn.lasagne import NeuralNet
 from lasagne import layers
 from lasagne import nonlinearities
 from lasagne.updates import nesterov_momentum
+from sklearn.cross_validation import train_test_split
 
 SEARCH_CLUES_PATH = "./cw/"
 
@@ -23,6 +24,11 @@ def process_input():
 		file_id, filename = process_filename(line)
 		for line2 in open(SEARCH_CLUES_PATH + filename, 'r').readlines():
 			print process_txt(line2)
+	return input, output
+
+def split_data(input, output):
+	x_train, x_test, y_train, y_test = train_test_split(input, output, test_size = 0.5)
+
 def train():
 	clf_nn = NeuralNet(
 	    layers=[  # three layers: one hidden layer
@@ -45,7 +51,9 @@ def train():
 	    verbose=1,
 	    )
 	clf_nn.fit(x_train, y_train)
+	return clf_nn
 
-def_predict
+def test(clf_nn, x_test):
+	return clf_nn.predict(x_test)
 
 process_input()
