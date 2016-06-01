@@ -64,6 +64,7 @@ print "nearest neighbors accuracy: ",acc_knn
 
 # In[7]:
 
+print x_train.shape, y_train.shape
 from nolearn.lasagne import NeuralNet
 from lasagne import layers
 from lasagne import nonlinearities
