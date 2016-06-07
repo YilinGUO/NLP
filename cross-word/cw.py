@@ -6,6 +6,21 @@ from sklearn.cross_validation import train_test_split
 from sklearn.metrics import accuracy_score
 from sklearn.feature_extraction.text import CountVectorizer
 import numpy as np
+import time
+from functools import wraps
+ 
+ 
+def fn_timer(function):
+	@wraps(function)
+	def function_timer(*args, **kwargs):
+		t0 = time.time()
+		result = function(*args, **kwargs)
+		t1 = time.time()
+		print ("Total time running %s: %s seconds" %
+			   (function.func_name, str(t1-t0))
+			   )
+		return result
+	return function_timer
 
 SEARCH_CLUES_PATH = "./cw/"
 
@@ -37,30 +52,33 @@ def process_input():
 	return input, output
 
 def split_data(input, output):
-	x_train, x_test, y_train, y_test = train_test_split(input, output, test_size = 0.5)
+	x_train, x_test, y_train, y_test = train_test_split(input, output, test_size = 0.2)
 	return x_train, x_test, y_train, y_test
 
+@fn_timer
 def train(x_train, y_train):
 	clf_nn = NeuralNet(
-	    layers=[  # three layers: one hidden layer
-	        ('input', layers.InputLayer),
-	        ('hidden', layers.DenseLayer),
-	        ('output', layers.DenseLayer),
-	        ],
-	    # layer parameters:
-	    input_shape=(None, 2538),  # 784 input pixels per batch
-	    hidden_num_units=100,  # number of units in hidden layer
-	    output_nonlinearity=nonlinearities.softmax,  # output layer uses identity function
-	    output_num_units=10,  # 10 target values
+		layers=[  # three layers: one hidden layer
+			('input', layers.InputLayer),
+			('hidden1', layers.DenseLayer),
+			('hidden2', layers.DenseLayer),
+			('output', layers.DenseLayer),
+			],
+		# layer parameters:
+		input_shape=(None, 2538),  # 784 input pixels per batch
+		hidden1_num_units=100,  # number of units in hidden layer
+		hidden2_num_units=100,
+		output_nonlinearity=nonlinearities.softmax,  # output layer uses identity function
+		output_num_units=10,  # 10 target values
 
-	    # optimization method:
-	    update=nesterov_momentum,
-	    update_learning_rate=0.01,
-	    update_momentum=0.9,
-	    
-	    max_epochs=10,  # we want to train this many epochs
-	    verbose=1,
-	    )
+		# optimization method:
+		update=nesterov_momentum,
+		update_learning_rate=0.01,
+		update_momentum=0.9,
+		
+		max_epochs=50,  # we want to train this many epochs
+		verbose=1,
+		)
 	clf_nn.fit(x_train, y_train)
 	return clf_nn
 
