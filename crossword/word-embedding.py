@@ -1,5 +1,7 @@
 import gensim
-import logging 
+import logging
+from sklearn.cross_validation import train_test_split
+from sklearn.feature_extraction.text import CountVectorizer
 logging.basicConfig(format='%(asctime)s : %(levelname)s : %(message)s', level=logging.INFO)
 
 SEARCH_CLUES_PATH = "./cw/"
@@ -27,13 +29,22 @@ def process_input():
 		output.append(filename)
 		for line2 in open(SEARCH_CLUES_PATH + filename + '.txt', 'r').readlines():
 			processed = process_txt(line2)
-			processed.append(filename)
+			processed.append(filename) ###
 			sentences.append(processed)
-	#model = gensim.models.Word2Vec(sentences)
-	#model.save('./mymodel')
-	print output
-	model = gensim.models.Word2Vec.load('./mymodel')
-	return input, output
+	train, test = train_test_split(sentences, test_size = 0.2)
+	vectorizer = CountVectorizer(analyzer = "word", tokenizer = None,  preprocessor = None, stop_words = None)
+	train_data_features = vectorizer.fit_transform(sentences)
+	vocab = vectorizer.get_feature_names()
+	print vocab
+	return train, test, output
 
 
-x, y = process_input()
+train, test, output = process_input()
+model = gensim.models.Word2Vec(train)
+model.save('./mymodel')
+vocab = model.scan_vocab(train)
+print vocab
+#model = gensim.models.Word2Vec.load('./mymodel')
+#print test[0]
+#print test[0][1],output[1]
+#print model.similarity(test[0][1],output[1])
